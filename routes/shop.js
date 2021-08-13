@@ -2,13 +2,11 @@ const path = require('path');
 
 const express = require('express');
 const router = express.Router();
-const rootDir = require('../utils/path')
+//const rootDir = require('../utils/path')
+//const adminData = require('./admin');
+const productController = require('../controllers/products');
 
-router.get('/', (req, res, next) => {
-    //res.send('<h1> Main page </h1>');
-    res.sendFile(path.join(rootDir, 'views','shop.html')); 
-    // __dirname is a global variable that holds the absolute path on our OS. it will point to routes folder
-});
+router.get('/', productController.getProducts);
 
 // app.use('/', (req, res, next) => { // It indicate that any path start with '/' will be executed here.
 //     console.log('hi')

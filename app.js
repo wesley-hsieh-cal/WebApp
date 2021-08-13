@@ -9,6 +9,11 @@ const bodyParser = require('body-parser');
 const app = express();
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
+const errorController = require('./controllers/error.js');
+
+// app.set('view engine', 'pug'); // Setting the template engine to 'Pug'
+app.set('view engine', 'ejs'); // Setting the template engine to 'ejs'
+app.set('views', 'views'); // The latter is the folder's name
 
 app.use(bodyParser.urlencoded({extended: false})); // This has to go before path parser such that it is run before them and be used in the future
 app.use(express.static(path.join(__dirname, 'public')));
@@ -17,10 +22,7 @@ app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 // Others: app.(delete, patch, and put) ...
 
-app.use((req, res, next) => { // use will handle all sorts of requests like POST, GET, PUT, ...
-    //res.status(404).send('<h1> Page not found</h1>');
-    res.status(404).sendFile(path.join(__dirname, 'views', 'not-found.html'));
-});
+app.use(errorController.get_404);
 
 
 app.listen(3000);
