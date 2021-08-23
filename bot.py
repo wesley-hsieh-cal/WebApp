@@ -37,4 +37,3 @@ async def endGame(ctx):
 #     responses = ['Yes', 'No', 'Maybe']
 #     await ctx.send(f'Question: {question}\nAnswer: {random.choice(responses)}')
         
-client.run('ODc5MTQ2MDcxMDEwNDQ3Mzgw.YSLelQ.KVEC75VeDzACLcslcaO42VX6LKI')
