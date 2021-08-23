@@ -1,38 +1,25 @@
-//const products = [];
-const fs = require('fs');
-const path = require('path');
-
-const p = path.join(
-    path.dirname(process.mainModule.filename), 
-    'data', 
-    'products.json'
-);
-
-const getProductFromFile = callback => {
-    fs.readFile(p, (err, fileContent) => {
-        if (err) {
-            return callback([]);
-        };
-        return callback(JSON.parse(fileContent));
-    });
-}
-
-module.exports = class Product {
-    constructor(title) {
-        this.title = title;
+const Sequelize = require('sequelize').Sequelize;
+const sequelize = require('../utils/database');
+const Product = sequelize.define('product', {
+    id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        allowNull: false,
+        primaryKey: true
+    },
+    title: Sequelize.STRING,
+    price: {
+        type: Sequelize.DOUBLE,
+        allowNull: false
+    },
+    imageUrl: {
+        type: Sequelize.STRING,
+        allowNull: false
+    },
+    description: {
+        type: Sequelize.STRING,
+        allowNull: false
     }
+});
 
-    save() {
-        //products.push(this)
-        getProductFromFile(products => {
-            products.push(this);
-            fs.writeFile(p, JSON.stringify(products), (err) => {
-                console.log(err);
-            });
-        });
-    }
-
-    static fetchAll(callback) {
-        getProductFromFile(callback);
-    }
-}
+module.exports = Product;
