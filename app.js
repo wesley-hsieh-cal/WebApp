@@ -1,80 +1,57 @@
-//const http = require('http');
 const path = require('path');
 
 // Third-party imported module
 const express = require('express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
-// main
-const app = express();
 const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
-const errorController = require('./controllers/error.js');
-const sequelize = require('./utils/database');
-
-// Relations between Models
-const Product = require('./models/product');
+const errorController = require('./controllers/error');
+//const mongoConnect = require('./utils/database').mongoConnect;
 const User = require('./models/user');
-const Cart = require('./models/cart');
-const CartItem = require('./models/cart-item');
-const Order = require('./models/order');
-const OrderItem = require('./models/order-item');
 
-
-// app.set('view engine', 'pug'); // Setting the template engine to 'Pug'
-app.set('view engine', 'ejs'); // Setting the template engine to 'ejs'
-app.set('views', 'views'); // The latter is the folder's name
+const app = express();
+app.set('view engine', 'ejs');
+app.set('views', 'views');
 
 app.use(bodyParser.urlencoded({extended: false})); // This has to go before path parser such that it is run before them and be used in the future
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
-    User.findByPk(1)
-    .then(user => {
-        req.user = user; // It is an sequelize object not JS.
-        next();
-    })
-    .catch(err => {console.log(err)});
+    User.findById('6125362f8f52c5329190c00f')
+        .then(user => {
+            //req.user = new User(user.name, user.email, user.cart, user._id);
+            req.user = user;
+            next();
+        })
+        .catch(err => console.log(err));
 });
 
 // /admin/add-product
 app.use('/admin', adminRoutes);
 app.use(shopRoutes);
-// Others: app.(delete, patch, and put) ...
 
 app.use(errorController.get_404);
 
-Product.belongsTo(User, {constraints: true, onDelete: 'CASCADE'}); // A user who offer a product 
-User.hasMany(Product); // A user can sell more products
-User.hasOne(Cart); // A user can only have one cart at a time
-Cart.belongsTo(User); // Cart can only belongs to one user
-Cart.belongsToMany(Product, {through: CartItem}); 
-Product.belongsToMany(Cart, {through: CartItem});
-Order.belongsTo(User);
-User.hasMany(Order);
-Order.belongsToMany(Product, {through: OrderItem});
-
-sequelize
-    //.sync({force: true})
-    .sync()
+mongoose.connect('mongodb+srv://WesMac:xRKKMc68v6D2hgaH@cluster0.0frhb.mongodb.net/cluster0?retryWrites=true&w=majority')
     .then(result => {
-        return User.findByPk(1);
-        //app.listen(3000);
-    })
-    .then(user => {
-        if (!user) {
-            return User.create({name: 'Wes', email:'wes@test.com'});
-        }
-        return user;
-    })
-    .then(user => {
-        return user.createCart();
-    })
-    .then(cart => {
+        User.findOne().then(user => {
+            if (!user) {
+                const user = new User({
+                    name: 'Wes', 
+                    email: 'wes@test.com',
+                    cart: {
+                        items: []
+                    }
+                });
+                user.save();
+            };
+        });
         app.listen(3000);
     })
-    .catch(
-        err => {console.log(err)}
-    );
+    .catch(err => {console.log(err)});
 
-    //app.listen(3000);
+// mongoConnect(() => {
+//     app.listen(3000);
+// });
