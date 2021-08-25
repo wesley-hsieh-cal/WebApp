@@ -1,0 +1,18 @@
+.login-form{
+    width: 20rem;
+    max-width: 90%;
+    margin: auto;
+    display: block
+}
+
+.user-message {
+    margin: auto; /* center */
+    width: 90%;
+    color: #0400ff;
+    padding: 0.5rem;
+    text-align: center;
+}
+
+.user-message--error {
+    color: red;
+}

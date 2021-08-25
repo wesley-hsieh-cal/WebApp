@@ -9,7 +9,7 @@ exports.getProducts = (req, res, next) => {
             res.render('shop/product-list', {
                 prods: products, 
                 pageTitle: 'Shop', 
-                path: '/products',
+                path: '/products'
             });
         })
         .catch(err => {console.log(err)});
@@ -17,19 +17,6 @@ exports.getProducts = (req, res, next) => {
 
 exports.getProductsDetails = (req, res, next) => {
     const prodId = req.params.productId; // @ shop.js in routes, we tell express that treat products/... as productId
-    // Product.findById(prodId, product => {
-    //     res.render('shop/product-detail', {
-    //         product: product,
-    //         pageTitle: product.title,
-    //         path: '/products'
-    //     })
-    // });
-
-    // One way to find an item
-    // Product.findAll({
-    //     where: {id: prodId}
-    // }).then(products=>{products[0]}).catch();
-
     Product.findById(prodId) // Mongoose has findById method
     .then(product => {
         res.render('shop/product-detail', {
@@ -48,27 +35,18 @@ exports.getIndex = (req, res, next) => {
         res.render('shop/index', {
             prods: products, 
             pageTitle: 'Shop', 
-            path: '/',
+            path: '/'
         });
     })
     .catch(err => {console.log(err)});
 };
 
 exports.getCart = (req, res, next) => {
-    // req.user.getCart()
-    // .then(products => {
-    //     console.log('prod is ', products);
-    //     res.render('shop/cart', {
-    //         path: '/cart',
-    //         pageTitle: 'Your Cart',
-    //         products: products
-    //     })
-    // })
-    // .catch(err => {console.log(err)});
     req.user.populate('cart.items.productId')
         .execPopulate()
         .then(user => {
             const products = user.cart.items;
+            console.log(products);
             res.render('shop/cart', {
                 path: '/cart',
                 pageTitle: 'Your Cart',
@@ -109,7 +87,7 @@ exports.postOrder = (req, res, next) => {
             });
             const order = new Order({
                 user: {
-                    name: req.user.name,
+                    email: req.user.email,
                     userId: req.user
                 },
                 products: products

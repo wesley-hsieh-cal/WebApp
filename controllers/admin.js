@@ -19,7 +19,7 @@ exports.postAddProduct = (req, res, next) => {
         price: price, 
         description: description, 
         imageUrl: imageUrl,
-        userId: req.user // or just req.user,_id
+        userId: req.user // or just req.user._id
     });
     product.save() // mongoose have its save method.
         .then(() => {
@@ -36,7 +36,7 @@ exports.getProducts = (req, res, next) => {
         res.render('admin/products', {
             prods: products, 
             pageTitle: 'Admin Products', 
-            path: '/admin/products',
+            path: '/admin/products'
         });
     })
     .catch(err => {console.log(err)});

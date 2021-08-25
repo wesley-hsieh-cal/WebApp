@@ -1,6 +1,6 @@
 <%- include('../includes/head.ejs') %>
-    <link rel="stylesheet" href="/css/product.css">
     <link rel="stylesheet" href="/css/form.css">
+    <link rel="stylesheet" href="/css/product.css">
 </head>
 <body>
     <%- include('../includes/navigation.ejs') %>
@@ -26,7 +26,8 @@
             <% if (editing) { %>
                 <input type="hidden" name="productId" value="<%= product._id %>">
             <% } %>
-            <button type="submit"><% if (editing) { %>Update Product<% } else { %>Add Product<% } %></button>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <button class="btn" type="submit"><% if (editing) { %>Update Product<% } else { %>Add Product<% } %></button>
         </form>
     </main>
     <%- include('../includes/end.ejs') %>
