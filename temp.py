@@ -15,7 +15,7 @@ async def playWerewolf(ctx):
     channel = discord.utils.get(guild.text_channels, name="werewolf")
     if not channel:
         await guild.create_text_channel("werewolf")
-    if channel:
+    else:
         await ctx.send('There\'s already a game!')
         
 @client.command()
@@ -26,10 +26,17 @@ async def endGame(ctx):
         await channel.delete()
     
     
+
 # @client.command()
+# @commands.has_permissions(manage_messages=True)
 # async def clear(ctx, amount=5):
 #     if amount == 0: return
 #     await ctx.channel.purge(limit=amount+1)
+
+# @clear.error
+# async def clear_error(ctx, error):
+#     if isinstance(error, commands.MissingRequiredArgument):
+#         await ctx.send('Please specify an amount of message to delete.')
     
 # Function for returning a random response to the user
 # @client.command(aliases=['8ball', 'test']) # The passing array are the tags can be used to call this fn
