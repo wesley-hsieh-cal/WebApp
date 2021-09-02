@@ -8,6 +8,19 @@ def get_prefix(client, message):
         prefixes = json.load(f)
     return prefixes[str(message.guild.id)]
 
+# class CustomHelpCommand(commands.HelpCommand):
+#     def __init__(self):
+#         super().__init__()      
+#     # This method is the general '!help' command.
+#     async def send_bot_help(self, mapping):
+#         for cog in mapping:
+#             await self.get_destination().send(f'{cog.qualified_name}: {[command.name for command in mapping[cog]]}') 
+#     async def send_cog_help(self, cog):
+#         await self.get_destination().send(f'{cog.qualified_name}: {[command.name for command in cog.get_commands()]}')
+#     async def send_command_help(self, command):
+#         return await super().send_command_help(command)
+# client = commands.Bot(command_prefix=get_prefix, help_command=CustomHelpCommand())
+
 client = commands.Bot(command_prefix=get_prefix)
 
 @client.event
@@ -16,14 +29,23 @@ async def on_ready():
     
 @client.command()
 async def load(ctx, extension):
+    """
+        Load my commands
+    """
     client.load_extension(f'cogs.{extension}')
     
 @client.command()
 async def unload(ctx, extension):
+    """
+        Unload my commands
+    """
     client.unload_extension(f'cogs.{extension}')
     
 @client.command()
 async def reload(ctx, extension):
+    """
+        Reload my commands
+    """
     client.unload_extension(f'cogs.{extension}')
     client.load_extension(f'cogs.{extension}')
     
@@ -31,6 +53,8 @@ async def reload(ctx, extension):
 async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         await ctx.send('Command is invalid. Please use !help to find command.')
+    if isinstance(error, commands.MissingRequiredArgument):
+        await ctx.send('Please pass in all required arguments!')
         
 # When this bot joins a server, it will register '!' as command's prefix as default.
 # The prefix will be store in json.

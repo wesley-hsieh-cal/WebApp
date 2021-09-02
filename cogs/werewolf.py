@@ -2,9 +2,6 @@ import discord
 from discord.ext import commands
 import mysql.connector
 
-# db = mysql.connector.connect(host="127.0.0.1", user="root", password="19960630", database="Discord")
-# cursor = db.cursor()
-
 class Werewolf(commands.Cog):
     def __init__(self, client):
         self.client = client
@@ -12,7 +9,7 @@ class Werewolf(commands.Cog):
     @commands.command()
     async def play_game(self, ctx):
         """
-            Start the game! If there's one, then either wait or call !end_game
+            Start the game!
             Let the user to initiate a game by creating voice channels 'werewolf' and 'dead'.
             Report to the user if a game is exist.
         """
